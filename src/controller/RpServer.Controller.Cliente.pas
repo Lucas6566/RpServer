@@ -6,7 +6,7 @@ uses
   Horse,
   System.JSON,
   IdHashMessageDigest,
-  REST.Json;
+  REST.Json, DataSet.Serialize;
 
   procedure Registry;
 
@@ -30,7 +30,7 @@ var
   iDAO : iDAOGeneric<TCliente>;
 begin
   iDAO := TDAOGeneric<TCliente>.New;
-  Res.Send(iDAO.Find);
+  Res.Send(iDAO.Find(Req.Query.Dictionary));
 end;
 
 procedure GetID(Req: THorseRequest; Res: THorseResponse; Next: TProc);

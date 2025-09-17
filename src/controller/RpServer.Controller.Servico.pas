@@ -30,7 +30,7 @@ var
   iDAO : iDAOGeneric<TServico>;
 begin
   iDAO := TDAOGeneric<TServico>.New;
-  Res.Send(iDAO.Find);
+  Res.Send(iDAO.Find(Req.Query.Dictionary));
 end;
 
 procedure GetID(Req: THorseRequest; Res: THorseResponse; Next: TProc);
@@ -78,7 +78,7 @@ end;
 procedure Update(Req: THorseRequest; Res: THorseResponse; Next: TProc);
 var
   iDAO : iDAOGeneric<TServico>;
-  LJson, LRetorno : TJSONObject;
+  LJson : TJSONObject;
 begin
   LJson := Req.Body<TJSONObject>;
 

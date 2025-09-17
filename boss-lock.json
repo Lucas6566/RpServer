@@ -5,7 +5,7 @@
 		"github.com/academiadocodigo/simpleorm": {
 			"name": "simpleorm",
 			"version": "2.02.11",
-			"hash": "2863bb98c4844bb06eab96aa858a4e96",
+			"hash": "e901196d7a1b45dfeb771a31529cde61",
 			"artifacts": {},
 			"failed": false,
 			"changed": false
@@ -28,8 +28,8 @@
 		},
 		"github.com/hashload/horse": {
 			"name": "horse",
-			"version": "3.1.6",
-			"hash": "7fdacf6b762af6406e17d06e1c5fb0a1",
+			"version": "3.1.8",
+			"hash": "7a3552708671dfc0d2d273b97d75a3df",
 			"artifacts": {},
 			"failed": false,
 			"changed": false

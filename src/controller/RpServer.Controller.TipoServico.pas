@@ -78,7 +78,7 @@ end;
 procedure Update(Req: THorseRequest; Res: THorseResponse; Next: TProc);
 var
   iDAO : iDAOGeneric<TTipoServico>;
-  LJson, LRetorno : TJSONObject;
+  LJson : TJSONObject;
 begin
   LJson := Req.Body<TJSONObject>;
 

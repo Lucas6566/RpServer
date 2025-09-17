@@ -9,21 +9,18 @@ interface
 uses
 {$IF DEFINED(FPC)}
   SysUtils,
-  Classes,
   fpHTTP,
   HTTPDefs,
 {$ELSE}
   System.SysUtils,
-  System.Classes,
   Web.HTTPApp,
 {$IF CompilerVersion > 32.0}
   Web.ReqMulti,
 {$ENDIF}
 {$ENDIF}
   Horse.Core.Param,
-  Horse.Core.Param.Header,
-  Horse.Commons,
-  Horse.Session;
+  Horse.Session,
+  Horse.Commons;
 
 type
   THorseRequest = class
@@ -48,6 +45,7 @@ type
     function Body: string; overload; virtual;
     function Body<T: class>: T; overload;
     function Body(const ABody: TObject): THorseRequest; overload; virtual;
+    function Body(const Encoding: TEncoding): string; overload; virtual;
     function Session<T: class>: T; overload;
     function Session(const ASession: TObject): THorseRequest; overload; virtual;
     function Headers: THorseCoreParam; virtual;
@@ -67,6 +65,14 @@ type
 
 implementation
 
+uses      
+{$IF DEFINED(FPC)}
+  Classes,
+{$ELSE}
+  System.Classes,
+{$ENDIF}
+  Horse.Core.Param.Header;
+
 function THorseRequest.Body: string;
 begin
   Result := FWebRequest.Content;
@@ -78,6 +84,28 @@ begin
   if Assigned(FBody) then
     FBody.Free;
   FBody := ABody;
+end;
+
+function THorseRequest.Body(const Encoding: TEncoding): string;
+{$IF DEFINED(FPC)}
+var
+  lContent: TStringStream;
+{$ENDIF}
+begin
+  {$IF DEFINED(FPC)}
+  try
+    lContent := TStringStream.Create(FWebRequest.Content, Encoding);
+    Result   := lContent.DataString;
+  finally
+    lContent.Free;
+  end;
+  {$ELSE}
+  {$IF CompilerVersion <= 31.0}
+  Result := Encoding.GetString(BytesOf(FWebRequest.RawContent));
+  {$ELSE}
+  Result := Encoding.GetString(FWebRequest.RawContent);
+  {$ENDIF}
+  {$ENDIF}
 end;
 
 function THorseRequest.Body<T>: T;
@@ -246,7 +274,10 @@ begin
     LEqualFirstPos := Pos('=', LItem);
     LKey := Copy(LItem, 1, LEqualFirstPos - 1);
     LValue := Copy(LItem, LEqualFirstPos + 1, Length(LItem));
-    FQuery.Dictionary.AddOrSetValue(LKey, LValue);
+    if not FQuery.Dictionary.ContainsKey(LKey) then
+      FQuery.Dictionary.AddOrSetValue(LKey, LValue)
+    else
+      FQuery.Dictionary[LKey] := FQuery.Dictionary[LKey] +','+ LValue;
   end;
 end;
 

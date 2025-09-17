@@ -29,7 +29,7 @@ var
   iDAO : iDAOGeneric<TCidade>;
 begin
   iDAO := TDAOGeneric<TCidade>.New;
-  Res.Send(iDAO.Find);
+  Res.Send(iDAO.Find(Req.Query.Dictionary));
 end;
 
 procedure GetID(Req: THorseRequest; Res: THorseResponse; Next: TProc);
@@ -63,7 +63,6 @@ end;
 procedure Delete(Req: THorseRequest; Res: THorseResponse; Next: TProc);
 var
   iDAO : iDAOGeneric<TCidade>;
-  LJson : TJSONObject;
 begin
   iDAO := TDAOGeneric<TCidade>.New;
   if iDAO.Delete(Req.Params.Items['id']) then

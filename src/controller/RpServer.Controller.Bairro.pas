@@ -30,7 +30,7 @@ var
   iDAO : iDAOGeneric<TBairro>;
 begin
   iDAO := TDAOGeneric<TBairro>.New;
-  Res.Send(iDAO.Find);
+  Res.Send(iDAO.Find(Req.Query.Dictionary));
 end;
 
 procedure GetID(Req: THorseRequest; Res: THorseResponse; Next: TProc);
