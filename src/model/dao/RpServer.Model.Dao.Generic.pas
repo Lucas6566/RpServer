@@ -78,6 +78,8 @@ uses
 
 constructor TDAOGeneric<T>.Create;
 begin
+  TDataSetSerializeConfig.GetInstance.CaseNameDefinition := TCaseNameDefinition.cndNone;
+
   FDataSource := TDataSource.Create(nil);
   FIndexConn := RpServer.Model.Connection.Connected;
   FConn := TSimpleQueryFiredac.New(RpServer.Model.Connection.FConnList.Items[FIndexConn]);
